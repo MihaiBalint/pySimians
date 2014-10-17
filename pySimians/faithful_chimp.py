@@ -41,11 +41,13 @@ class FaithfulChimp(object):
     def _use_tools(self):
         env.command_timeout = 60 * 3
 
+        # not working due to one shell per call to run
         run("""echo "TODO: use tool in background" """)
-        result = run("sleep 10 & echo $!")
+        result = run("dtach -n `mktemp -u /tmp/%s.XXXX` sleep 20 & echo $!",
+                     pty=True)
 
         run("""echo "TODO: use tool and wait to complete" """)
-        run("sleep 2")
+        run("sleep 3")
 
         # kill running background process
         run("kill -9 {} || true".format(result.split("\n")[0]))
