@@ -42,10 +42,10 @@ class FaithfulChimp(object):
         env.command_timeout = 60 * 3
 
         run("""echo "TODO: use tool in background" """)
-        result = run("sleep 5 & echo $!")
+        result = run("sleep 10 & echo $!")
 
         run("""echo "TODO: use tool and wait to complete" """)
-        run("sleep 5")
+        run("sleep 2")
 
         # kill running background process
         run("kill -9 {} || true".format(result.split("\n")[0]))
@@ -53,7 +53,7 @@ class FaithfulChimp(object):
 
 if __name__ == '__main__':
     # TODO move this in a test file
-    m = FaithfulChimp("localhost", 22, "mihai")
+    m = FaithfulChimp("localhost", 22, os.environ.get("USER"))
 
     # A simple tool
     m.give_tool("test_echo_tool", "test_scripts")
